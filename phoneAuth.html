@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link rel="icon" href="https://files.oaiusercontent.com/file-4QznYiHhGtPDHyB5iC9dXxXP?se=2123-12-05T09%3A03%3A45Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D1209600%2C%20immutable&rscd=attachment%3B%20filename%3D5a058a41-9fb5-43b0-9ed3-15e07735ae3d.png&sig=0Ta4VBF39SoASdLCO61HrucYg4S3ZIXF4lqjmid5OfQ%3D">
+
+  <title>Firebase Phone Authentication</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Login</h1>
+  <p>Please enter your name and mobile number (including the country code). For example, "+91".</p>
+  <input type="text" id="nameInput" placeholder="Enter your name">
+  <input type="text" id="phoneNumberInput" placeholder="Enter your phone number">
+  <button onclick="sendOTP()">Send OTP</button>
+  <input type="text" id="otpInput" placeholder="Enter OTP">
+  <button onclick="verifyOTP()">Verify OTP</button>
+
+  <div id="recaptcha-container"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script>
+    window.onload = function(){
+      
+    }
+    // Initialize Firebase
+   const firebaseConfig = {
+  apiKey: "AIzaSyBD-tTIodezQRkfrAmuW7mpDvLzrUbFi-A",
+  authDomain: "swararaga.firebaseapp.com",
+  projectId: "swararaga",
+  storageBucket: "swararaga.appspot.com",
+  messagingSenderId: "688890589696",
+  appId: "1:688890589696:web:53a6e61e54b54dc7629ee5",
+  measurementId: "G-42BGE7S07F"
+};
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Function to send OTP
+    function sendOTP() {
+      var name = document.getElementById("nameInput").value;
+      var phoneNumber = document.getElementById("phoneNumberInput").value;
+      var appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+
+      firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+        .then(function (confirmationResult) {
+          window.confirmationResult = confirmationResult;
+          alert('OTP sent!');
+        })
+        .catch(function (error) {
+          console.log("Error sending OTP", error);
+          alert('Error sending OTP. Please refresh the page and try again.');
+        });
+    }
+
+    // Function to verify OTP
+    function verifyOTP() {
+      var otp = document.getElementById("otpInput").value;
+      confirmationResult.confirm(otp)
+        .then(function (result) {
+          var user = result.user;
+          var name = document.getElementById("nameInput").value;
+
+          user.updateProfile({
+            displayName: name
+          })
+            .then(function () {
+              console.log("Name updated successfully");
+              alert('OTP verified successfully');
+             var name = document.getElementById("nameInput").value;
+            localStorage.clear();
+                localStorage.setItem('name',name);
+              window.location.href = 'chat.html';
+            })
+            .catch(function (error) {
+              console.log("Error updating name", error);
+              alert('Error updating name. Please try again.');
+            });
+        })
+        .catch(function (error) {
+          console.log("Error verifying OTP", error);
+          alert('OTP verification error. Please enter a valid OTP and try again.');
+        });
+    }
+  </script>
+</body>
+</html>
