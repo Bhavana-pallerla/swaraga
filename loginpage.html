@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+ <head>
+
+    <meta charset="utf-8">
+    <title>User Login</title>
+          <script src="https://kit.fontawesome.com/06b45a7278.js" crossorigin="anonymous"></script>
+        <meta name="viewport" content="width=divice-width initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+       <link rel="icon" href="https://files.oaiusercontent.com/file-4QznYiHhGtPDHyB5iC9dXxXP?se=2123-12-05T09%3A03%3A45Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D1209600%2C%20immutable&rscd=attachment%3B%20filename%3D5a058a41-9fb5-43b0-9ed3-15e07735ae3d.png&sig=0Ta4VBF39SoASdLCO61HrucYg4S3ZIXF4lqjmid5OfQ%3D">
+  </head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <div id="login-form">
+      <button onclick="loginWithGoogle()"><img src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-google-icon-logo-png-transparent-svg-vector-bie-supply-14.png"><p>Google</p></button>
+   <br><br>
+           <button id="btn" onclick="phone()"><i class="fa-solid fa-phone"></i><b>Phone Login</b></button>
+         </div>
+    <div class="error-message" id="login-error"></div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <script>
+         function phone(){
+                window.location.href="PhoneAuth.html";
+         }
+    // Initialize Firebase
+    const firebaseConfig = {
+  apiKey: "AIzaSyBD-tTIodezQRkfrAmuW7mpDvLzrUbFi-A",
+  authDomain: "swararaga.firebaseapp.com",
+  projectId: "swararaga",
+  storageBucket: "swararaga.appspot.com",
+  messagingSenderId: "688890589696",
+  appId: "1:688890589696:web:53a6e61e54b54dc7629ee5",
+  measurementId: "G-42BGE7S07F"
+};
+    firebase.initializeApp(firebaseConfig);
+
+    // Initialize the Google Sign-In API
+    gapi.load('auth2', function() {
+      gapi.auth2.init({
+        client_id: 'YOUR_CLIENT_ID'
+      });
+    });
+
+    // Function to handle Google login
+    function loginWithGoogle() {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then(function(result) {
+          // Get the signed-in user
+          var user = result.user;
+
+          // Get the additional user info
+          
+          var additionalUserInfo = result.additionalUserInfo;
+          var profilePicUrl = user.photoURL;
+          // Retrieve the user's name from additional user info
+          var userName = additionalUserInfo.profile.name;
+               localStorage.setItem('profilePicUrl', profilePicUrl);
+              localStorage.setItem('name', userName);
+          // Redirect to another page
+         window.location.href='Web A.html';
+        })
+        .catch(function(error) {
+          // Display error message
+         alert(error.meassage);
+        });
+    }
+  </script>
+  <style>
+    body{
+        box-sizing: border-box;
+        width: 100%;
+    }
+    #btn{
+      background-color: lightslategrey;
+    }
+     i,b{
+         display: inline;
+        margin: 0px;
+         }
+    i{
+        width: 25px;
+        float: left;
+        display: flex; 
+        color: white; 
+        font-size: 25px;
+        margin: 10px;
+                }
+      b{
+        color: white;
+        font-size: 20px;
+        margin:10px auto;
+        display: flex;
+     }
+    img{
+        width: 25px;
+        float: left;
+        display: flex;
+    }
+    p{
+        color: blue;
+        font-size: 20px;
+        margin: 5px;
+       display: flex;
+    }
+    img,p{
+        display: inline;
+        margin: 0px;
+    }
+    #login-error{
+        color: red;
+        font-size: 15px;
+        font-weight: 800;
+        margin: 10px;
+    }
+    .container{
+        margin: 0px auto;
+        width: 85%;
+        text-align: center;
+        margin-top: 50%;
+        border-radius: 20px;
+        padding: 20px;
+        background-color: whitesmoke;
+        box-shadow: 2px 2px 12px black;
+    }
+    h2{
+        font-size: 30px;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-weight: 800;
+        color: royalblue;
+    }
+    button{
+        width: 50%;
+        padding: 5px;
+        background-color:white;
+        border: none;
+        border-radius: 30px;
+    }
+    button:hover{
+        cursor: pointer;
+        box-shadow: 2px 2px 12px black;
+    }
+    h3{
+        text-align: center;
+        color: grey;
+        opacity: 50%;
+    }
+  </style>
+  <div>
+    <h3>Vbcoders</h3>
+  </div>
+</body>
+</html>
